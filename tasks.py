@@ -26,8 +26,9 @@ from typing import List
 from invoke import task
 
 venv = "source ./venv/bin/activate"
-GOOGLE_CLOUD_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT")
+GOOGLE_CLOUD_PROJECT = os.environ.get("PROJECT_ID")
 REGION = os.environ.get("REGION", "us-central1")
+REPOSITORY = os.environ.get("REPOSITORY")
 
 
 @task
@@ -35,6 +36,12 @@ def require_project(c):  # noqa: ANN001, ANN201
     """(Check) Require GOOGLE_CLOUD_PROJECT be defined"""
     if GOOGLE_CLOUD_PROJECT is None:
         print("GOOGLE_CLOUD_PROJECT not defined. Required for task")
+        sys.exit(1)
+    if REPOSITORY is None:
+        print("REPOSITORY not defined. Required for task")
+        sys.exit(1)
+    if REGION is None:
+        print("REGION not defined. Required for task")
         sys.exit(1)
 
 
