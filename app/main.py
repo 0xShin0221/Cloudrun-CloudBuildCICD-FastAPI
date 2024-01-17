@@ -12,7 +12,7 @@ app = FastAPI()
 
 @app.get("/", tags=["root"])
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Cloud build setup complete!"}
 
 if __name__ == "__main__":
     logger.info("Starting server")
