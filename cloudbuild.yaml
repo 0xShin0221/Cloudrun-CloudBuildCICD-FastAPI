@@ -1,0 +1,41 @@
+steps:
+  # Install dependencies
+  - name: python
+    entrypoint: pip
+    args: ["install", "-r", "requirements.txt", "--user"]
+
+  - name: python
+    entrypoint: python
+    args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
+  # [END cloudbuild_python_tests_yaml]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/cloudrun-fastapi:${SHORT_SHA}",
+        ".",
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/cloudrun-fastapi:${SHORT_SHA}",
+      ]
+
+  - name: google/cloud-sdk
+    args: [
+        "gcloud",
+        "run",
+        "deploy",
+        "cloudrun-fastapi",
+        # "helloworld-${SHORT_SHA}",
+        "--image=us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/cloudrun-fastapi:${SHORT_SHA}",
+        "--region",
+        "us-central1",
+        "--platform",
+        "managed",
+        "--allow-unauthenticated",
+      ]
