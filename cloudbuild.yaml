@@ -1,3 +1,5 @@
+substitutions:
+  _IMAGE_NAME: cloudrun-fastapi
 steps:
   # Install dependencies
   - name: python
@@ -14,7 +16,7 @@ steps:
       [
         "build",
         "-t",
-        "us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/cloudrun-fastapi:${SHORT_SHA}",
+        "us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/${IMAGE_NAME}:${SHORT_SHA}",
         ".",
       ]
 
@@ -22,7 +24,7 @@ steps:
     args:
       [
         "push",
-        "us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/cloudrun-fastapi:${SHORT_SHA}",
+        "us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/${IMAGE_NAME}:${SHORT_SHA}",
       ]
 
   - name: google/cloud-sdk
@@ -32,7 +34,7 @@ steps:
         "deploy",
         "cloudrun-fastapi",
         # "helloworld-${SHORT_SHA}",
-        "--image=us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/cloudrun-fastapi:${SHORT_SHA}",
+        "--image=us-central1-docker.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/${IMAGE_NAME}:${SHORT_SHA}",
         "--region",
         "us-central1",
         "--platform",
