@@ -26,9 +26,10 @@ from typing import List
 from invoke import task
 
 venv = "source ./venv/bin/activate"
-GOOGLE_CLOUD_PROJECT = os.environ.get("PROJECT_ID")
+GOOGLE_CLOUD_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT")
 REGION = os.environ.get("REGION", "us-central1")
 REPOSITORY = os.environ.get("REPOSITORY")
+GOOGLE_GCLOUD_SERVICE = os.environ.get("GOOGLE_GCLOUD_SERVICE")
 
 
 @task
@@ -40,8 +41,8 @@ def require_project(c):  # noqa: ANN001, ANN201
     if REPOSITORY is None:
         print("REPOSITORY not defined. Required for task")
         sys.exit(1)
-    if REGION is None:
-        print("REGION not defined. Required for task")
+    if GOOGLE_GCLOUD_SERVICE is None:
+        print("GOOGLE_GCLOUD_SERVICE not defined. Required for task")
         sys.exit(1)
 
 
@@ -127,7 +128,7 @@ def build(c):  # noqa: ANN001, ANN201
     """Build the service into a container image"""
     c.run(
         f"gcloud builds submit --pack "
-        f"image={REGION}-docker.pkg.dev/{GOOGLE_CLOUD_PROJECT}/{REPOSITORY}/sns-switch-backend:manual"
+        f"image={REGION}-docker.pkg.dev/{GOOGLE_CLOUD_PROJECT}/{REPOSITORY}/${GOOGLE_GCLOUD_SERVICE}:manual"
     )
 
 
@@ -135,10 +136,10 @@ def build(c):  # noqa: ANN001, ANN201
 def deploy(c):  # noqa: ANN001, ANN201
     """Deploy the container into Cloud Run (fully managed)"""
     c.run(
-        "gcloud run deploy sns-switch-backend "
+        "gcloud run deploy ${GOOGLE_GCLOUD_SERVICE} "
         f"--port 8080 "
         f"--source ."
-        f"--platform managed --region {REGION}"
+        # f"--platform managed --region {REGION}"
     )
 
 

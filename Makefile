@@ -4,4 +4,4 @@ cloudrun-repo-create:
 
 cloudrun-deploy: 
 	@echo Deploying to Cloud Run...
-	gcloud run deploy $(REPOSITORY) --image gcr.io/$(PROJECT_ID)/$(REPOSITORY) --platform managed --region $(REGION)
+	gcloud run deploy $(REPOSITORY) --image gcr.io/$(GOOGLE_CLOUD_PROJECT)/$(REPOSITORY) --platform managed --region $(REGION)
