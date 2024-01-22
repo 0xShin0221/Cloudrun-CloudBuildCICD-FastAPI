@@ -1,18 +1,18 @@
-# main.py
+from logging import getLogger
+from typing import Dict
 
 from fastapi import FastAPI
+
 import uvicorn
-
-from logging import getLogger, StreamHandler
-from fastapi import FastAPI
 
 logger = getLogger("uvicorn.app")
 app = FastAPI()
 
 
 @app.get("/", tags=["root"])
-async def root():
+async def root() -> Dict[str, str]:
     return {"message": "Cloud build setup complete!"}
+
 
 if __name__ == "__main__":
     logger.info("Starting server")
