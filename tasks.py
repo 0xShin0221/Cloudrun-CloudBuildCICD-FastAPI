@@ -83,7 +83,7 @@ def start(c):  # noqa: ANN001, ANN201
 def dev(c):  # noqa: ANN001, ANN201
     """Start the web service in a development environment, with fast reload"""
     with c.prefix(venv):
-        c.run("uvicorn app.main:app --reload")
+        c.run("uvicorn app.main:app --reload --port 8080")
 
 
 @task(pre=[require_venv])
