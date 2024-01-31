@@ -15,7 +15,6 @@ gcloud services enable run.googleapis.com
 ## Features
 
 - **FastAPI**: Web server framework
-- **CICD**: Google Cloud build serverless CICD
 - **Buildpack support** Tooling to build production-ready container images from source code and without a Dockerfile
 - **Dockerfile**: Container build instructions, if needed to replace buildpack for custom build
 - **SIGTERM handler**: Catch termination signal for cleanup before Cloud Run stops the container
