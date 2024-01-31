@@ -12,6 +12,10 @@ A template repository for a Cloud Run microservice, written in Python
 gcloud services enable run.googleapis.com
 ```
 
+## Langchain-docs Branch
+
+This repository now includes a new branch named `Langchain-docs` dedicated to documenting the contents and features of Langchain. For detailed information and documentation, please refer to the `Langchain-docs` branch.
+
 ## Features
 
 - **FastAPI**: Web server framework
