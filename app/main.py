@@ -2,20 +2,20 @@
 from typing import List
 
 from fastapi import FastAPI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-from langchain_community.document_loaders import WebBaseLoader
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
+# from langchain_core.prompts impor
+# t ChatPromptTemplate
+from langchain import hub
+from langchain.agents import AgentExecutor
+from langchain.agents import create_openai_functions_agent
+from langchain.pydantic_v1 import BaseModel, Field
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.tools.retriever import create_retriever_tool
+from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.tools.tavily_search import TavilySearchResults
-from langchain_openai import ChatOpenAI
-from langchain import hub
-from langchain.agents import create_openai_functions_agent
-from langchain.agents import AgentExecutor
-from langchain.pydantic_v1 import BaseModel, Field
+from langchain_community.vectorstores import FAISS
 from langchain_core.messages import BaseMessage
+from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
 from langserve import add_routes
 
 # 1. Load Retriever
@@ -74,6 +74,10 @@ add_routes(
     agent_executor.with_types(input_type=Input, output_type=Output),
     path="/agent",
 )
+
+@app.get("/health")
+async def health() -> dict:
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
