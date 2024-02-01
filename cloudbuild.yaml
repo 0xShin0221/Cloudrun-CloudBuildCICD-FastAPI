@@ -1,15 +1,16 @@
 steps:
-  - name: python
+  - name: python:3.9
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
 
-  - name: python
+  - name: python:3.9
     entrypoint: pip
     args: ["install", "-r", "requirements-test.txt", "--user"]
 
-  - name: python
+  - name: python:3.9
     entrypoint: python
     args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
+    secretEnv: ["TAVILY_API_KEY", "OPENAI_API_KEY"]
   # [END cloudbuild_python_tests_yaml]
 
   - name: "gcr.io/cloud-builders/docker"
@@ -29,12 +30,12 @@ steps:
       ]
 
   - name: google/cloud-sdk
-    args: [
+    args:
+      [
         "gcloud",
         "run",
         "deploy",
-        "cloudrun-fastapi",
-        # "helloworld-${SHORT_SHA}",
+        "${_GCP_SERVICE_NAME}",
         "--image=${_REGION}.pkg.dev/${PROJECT_ID}/${PROJECT_ID}/${_IMAGE_NAME}:${SHORT_SHA}",
         "--region",
         "us-central1",
@@ -42,7 +43,14 @@ steps:
         "managed",
         "--allow-unauthenticated",
       ]
-
+availableSecrets:
+  secretManager:
+    - versionName: projects/${_GCP_PROJECT_ID}/secrets/OPENAI_API_KEY/versions/1
+      env: OPENAI_API_KEY
+    - versionName: projects/${_GCP_PROJECT_ID}/secrets/TAVILY_API_KEY/versions/1
+      env: TAVILY_API_KEY
 substitutions:
-  _IMAGE_NAME: cloudrun-fastapi
+  _IMAGE_NAME: langchain-book
   _REGION: us-central1-docker
+  _GCP_PROJECT_ID: "484952323778"
+  _GCP_SERVICE_NAME: langchain-book-api

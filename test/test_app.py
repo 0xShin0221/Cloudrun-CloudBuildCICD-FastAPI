@@ -6,10 +6,10 @@ client = TestClient(main.app)
 
 
 def test_get_index() -> None:
-    response = client.get("/")
+    response = client.get("/health")
     assert response.status_code == 200
 
 
 def test_post_index() -> None:
-    response = client.post("/")
+    response = client.post("/health")
     assert response.status_code == 405
